@@ -1,7 +1,9 @@
 import axios from "axios";
 import Link from 'next/link'
-import { GetServerSideProps, NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { http } from "../../util/http";
+
+const urlRequest = "https://my-json-server.typicode.com/Darlley/intensivao-ssr/users"
 
 type UserTypes = {
     _id?: string,
@@ -18,7 +20,7 @@ type UsersPageProps = {
     users?: UserTypes[]
 }
 
-const UsersPage: NextPage<UsersPageProps> = (props) => {
+const UsersStaticPage: NextPage<UsersPageProps> = (props) => {
     const {users} = props;
 
     return (
@@ -38,15 +40,16 @@ const UsersPage: NextPage<UsersPageProps> = (props) => {
     );
 }
 
-export default UsersPage;
+export default UsersStaticPage;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
 
-    const {data} = await http.get('api/users')
+    const {data} = await http.get(urlRequest)
 
     return {
         props: {
             users: data
-        }
+        },
+        revalidate: 10
     }
 } 

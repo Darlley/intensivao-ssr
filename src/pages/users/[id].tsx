@@ -1,18 +1,42 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 
-const User = () => {
+export async function getStaticPaths () {
+    return {
+        paths: [
+            {
+                params: {
+                    id: '1'
+                },
+            },
+            {
+                params: {
+                    id: '2'
+                },
+            }
+        ],
+        fallback: false
+    }
+}
 
-    const {
-        id: idRouteQuery, 
-        name: nameRouteQuery
-    } = useRouter().query
+export async function getStaticProps (context: any) {
+    const id = context.params.id
+    return {
+        props: {
+            id: id
+        }
+    }
+}
+
+const User = (props: any) => {
 
     return (
         <div>
-            <h1>Usuário #{idRouteQuery} {nameRouteQuery}</h1>
-            <a href="/users">Voltar</a>
+            <h1>Usuário #{props.id}</h1>
+            <Link href="/users">
+                <a>Criar novo</a>
+            </Link>
         </div>
     );
 }
 
-export default User;
+export default User;  
